@@ -25,12 +25,28 @@ def scrape_novidades(html_content):
 
 # Requisito 3
 def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    return selector.css(".next::attr(href)").get()
 
 
 # Requisito 4
 def scrape_noticia(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    title_with_space = selector.css(".entry-title::text").get()
+    list_paragraph = selector.css(
+        ".entry-content > p:first-of-type *::text"
+    ).getall()
+    news = {
+        "url": selector.css("link[rel~='canonical']::attr(href)").get(),
+        "title": "".join(title_with_space).strip(),
+        "timestamp": selector.css(".meta-date::text").get().strip(),
+        "writer": selector.css(".author a::text").get(),
+        "comments_count": len(selector.css(".comment-list li").getall()),
+        "summary": "".join(list_paragraph).strip(),
+        "category": selector.css(".category-style .label::text").get(),
+        "tags": selector.css(".post-tags ul li a::text").getall(),
+    }
+    return news
 
 
 # Requisito 5
