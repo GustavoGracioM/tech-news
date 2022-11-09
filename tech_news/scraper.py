@@ -55,9 +55,9 @@ def get_tech_news(amount):
     news = []
     html_content = fetch("https://blog.betrybe.com")
     next_page = scrape_next_page_link(html_content)
-    while next_page and len(news) < amount:
+    while next_page and len(news) < int(amount):
         for link in scrape_novidades(html_content):
-            if len(news) < amount:
+            if len(news) < int(amount):
                 news_detail = fetch(link)
                 news.append(scrape_noticia(news_detail))
         html_content = fetch(next_page)
